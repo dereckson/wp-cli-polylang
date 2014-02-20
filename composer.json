@@ -1,0 +1,27 @@
+{
+    "name": "dereckson/wp-cli-polylang",
+    "type": "command",
+    "description": "Add a `wp polylang` command to support the Polylang plug-in",
+    "keywords": [
+        "wp-cli",
+        "polylang",
+        "i18n"
+    ],
+    "homepage": "https://github.com/dereckson/wp-cli-polylang",
+    "license": "GPLv2",
+    "authors": [{
+        "name": "Sébastien Santoro aka Dereckson",
+        "email": "dereckson@espace-win.org",
+        "homepage": "http://www.dereckson.be",
+        "role": "Developer"
+    }],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "files": [
+            "Polylang_Command.php",
+            "PolylangHelperFunctions.php",
+        ]
+    }
+}
