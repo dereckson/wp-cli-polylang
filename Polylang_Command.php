@@ -54,12 +54,17 @@ class Polylang_Command extends WP_CLI_Command {
     /**
      * Gets the site homepage URL in the specified language
      *
+     * ## OPTIONS
+     *
+     * <language-code>
+     * : The language to get the home URL to.
+     *
      * ## EXAMPLES
      *
      *   wp polylang home
      *   wp polylang home fr
      *
-     * @synopsis [<lang>]
+     * @synopsis [<language-code>]
      */
     function home ($args, $assocArgs) {
         $lang = (count($args) == 1) ?  $args[0] : '';
@@ -71,12 +76,22 @@ class Polylang_Command extends WP_CLI_Command {
     /**
      * Gets a post or a term in the specified language
      *
+     * ## OPTIONS
+     *
+     * <data-type>
+     * : 'post' or 'term'
+     *
+     * <data-id>
+     * : the ID of the object to get
+     *
+     * <language-count>
+     * : the language (if omitted, will be returned in the default language)
+     *
      * ## EXAMPLES
      *
      *   wp polylang get post 1 fr
-     *   wp polylang get term Tagline en
      *
-     * @synopsis <data-type> <data-id> [<lang>]
+     * @synopsis <data-type> <data-id> [<language-code>]
      */
     function get($args, $assocArgs) {
         $lang = (count($args) == 2) ?  '' : $args[2];
@@ -96,15 +111,27 @@ class Polylang_Command extends WP_CLI_Command {
     }
 
     /**
-     * Adds, gets information or remove a language
+     * Adds, gets information about or removes a language
+     *
+     * ## OPTIONS
+     *
+     * <operation>
+     * : the language operation (add, info, del)
+     *
+     * <language-code>
+     * : the language code
+     *
+     * <order>
+     * : for add operation, indicates the order of the language
      *
      * ## EXAMPLES
      *
      *   wp polylang language add fr
+     *   wp polylang language add nl 2
      *   wp polylang language info vec
      *   wp polylang language del vec
      *
-     * @synopsis <language-code> <operation> [<order>]
+     * @synopsis <operation> <language-code> [<order>]
      */
     function language ($args, $assocArgs) {
         $language_code = $args[1];
