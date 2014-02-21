@@ -12,6 +12,12 @@
  * @filesource
  */
 
+if (!defined('WP_CLI')) {
+	return;
+}
+
+require_once 'PolylangHelperFunctions.php';
+
 /**
  * Implements polylang command, to interact with the Polylang plug-in.
  */

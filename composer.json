@@ -20,8 +20,8 @@
     },
     "autoload": {
         "files": [
-            "Polylang_Command.php",
             "PolylangHelperFunctions.php",
+            "Polylang_Command.php"
         ]
     }
 }
