@@ -13,7 +13,7 @@
  */
 
 if (!defined('WP_CLI')) {
-	return;
+    return;
 }
 
 require_once 'PolylangHelperFunctions.php';
