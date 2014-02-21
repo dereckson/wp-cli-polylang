@@ -31,6 +31,7 @@ class Polylang_Command extends WP_CLI_Command {
      *     wp polylang languages
      *
      * @synopsis
+     * @alias langs
      */
     function languages ($args, $assocArgs) {
         $languages = pll_get_languages_list();
@@ -132,6 +133,7 @@ class Polylang_Command extends WP_CLI_Command {
      *   wp polylang language del vec
      *
      * @synopsis <operation> <language-code> [<order>]
+     * @alias lang
      */
     function language ($args, $assocArgs) {
         $language_code = $args[1];
