@@ -36,7 +36,7 @@ class Polylang_Command extends WP_CLI_Command {
     function languages ($args, $assocArgs) {
         $languages = pll_get_languages_list();
         if (!count($languages)) {
-            WP_CLI::success("Less than two languages are currently configurated.");
+            WP_CLI::success("Less than two languages are currently configured.");
             return;
         }
 
@@ -174,7 +174,12 @@ class Polylang_Command extends WP_CLI_Command {
                     return;
                 }
 
-                WP_CLI::error("Not implemented: del language");
+                if (pll_del_language($language_code)) {
+                     WP_CLI::success("Language deleted.");
+                     return;
+                }
+
+                WP_CLI::error("Could not delete language");
                 break;
 
             default:

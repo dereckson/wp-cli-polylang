@@ -86,6 +86,27 @@ function pll_add_language($language_code, $language_order = 0, &$error_code = 0)
 }
 
 /**
+ * Delete a language with the default locale.
+ *
+ * @param string $language_code ISO 639 or locale code
+ * @return bool true if the language has been deleted; false if an error has occured
+ */
+function pll_del_language($language_code) {
+        global $polylang;
+
+        $languages = $polylang->model->get_languages_list();
+        foreach ($languages as $language) {
+                if ($language->slug == $language_code) {
+                    $adminModel = new PLL_Admin_Model($polylang->options);
+                    $adminModel->delete_language((int) $language->term_id);
+                    return true;
+                }
+        }
+
+        return false;
+}
+
+/**
  * Determines whether a language is currently installed.
  *
  * @param string $language_code The language slug
