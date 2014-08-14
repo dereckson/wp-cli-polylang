@@ -163,7 +163,7 @@ class Polylang_Command extends WP_CLI_Command {
      * <data-id>
      * : the ID of the object to set
      *
-     * <language-count>
+     * <language-code>
      * : the language (if omitted, will be set to the default language)
      *
      * ## EXAMPLES
@@ -196,8 +196,74 @@ class Polylang_Command extends WP_CLI_Command {
                 WP_CLI::error("Expected: wp polylang set <post or term> ..., not '$what'");
         }
 
-        $id = $method($args[1], $lang);
-        WP_CLI::line($id);
+        $method($args[1], $lang);
+        WP_CLI::success("language for $what $args[1] saved");
+    }
+
+    /**
+     * Associate terms or post as translations
+     *
+     * ## OPTIONS
+     *
+     * <data-type>
+     * : 'post' or 'term'
+     *
+     * <data-ids>
+     * : comma separated list of data IDs that are translations of each other
+     *
+     * ## EXAMPLES
+     *
+     *   wp polylang trans post 1,7,9
+     *   wp polylang trans term 27,32
+     *
+     * @synopsis <data-type> <data-ids>
+     */
+    function trans ($args, $assocArgs) {
+        // comma sperated list as array
+        $data_ids = explode( ',', array_slice( $args[1], 1));
+
+        // two or more ids necessary
+        if( count( $data_ids) < 2) {
+                WP_CLI::error("need at least two ids for translation");
+        }
+
+        // term or post
+        switch ($what = $args[0]) {
+            case 'post':
+            case 'term':
+                $method = 'pll_save_' . $what . '_translations';
+                $get_lang_method = 'pll_get_' . $what . '_language';
+                break;
+
+            default:
+                WP_CLI::error("Expected: wp polylang trans <post or term> ..., not '$what'");
+        }
+
+        // only available since 1.5.4 of polylang
+        if( !function_exists($get_lang_method)) {
+            WP_CLI::error("function $get_lang_method does not exist befor polylang 1.5.4 and is necessary for this implementation!");
+        }
+
+        // get language of each term or post and build array for the pll_save api function
+        $arr = array();
+        foreach( $data_ids as $id) {
+            $lang = $get_lang_method( $id);
+
+            // is the post or term already managed
+            if( !$lang) {
+                WP_CLI::error("'$what' $id is not managed yet and cannot be translated");
+            }
+
+            // is there a post or term with the same language given?
+            if( array_key_exists( $lang, $arr)){
+                WP_CLI::error("$lang => $id as well as $lang => $arr[$lang] ar two $what with the same language!");
+            }
+            $arr[ $lang] = $id;
+        }
+
+        // save the translation
+        $method( $arr);
+        WP_CLI::success("translations saved");
     }
 
     /**
