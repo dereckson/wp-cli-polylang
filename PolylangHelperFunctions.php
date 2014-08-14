@@ -15,7 +15,7 @@
  * @filesource
  */
 
- /**
+/**
  * Gets an array with the cached infomrmation about installed languages.
  *
  * @return array the installed languages, each item a PLL_Language object

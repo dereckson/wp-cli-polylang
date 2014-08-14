@@ -112,6 +112,54 @@ class Polylang_Command extends WP_CLI_Command {
     }
 
     /**
+     * Sets a post or a term to the specified language
+     *
+     * ## OPTIONS
+     *
+     * <data-type>
+     * : 'post' or 'term'
+     *
+     * <data-id>
+     * : the ID of the object to set
+     *
+     * <language-count>
+     * : the language (if omitted, will be set to the default language)
+     *
+     * ## EXAMPLES
+     *
+     *   wp polylang set post 1 fr
+     *
+     * @synopsis <data-type> <data-id> [<language-code>]
+     */
+    function set($args, $assocArgs) {
+        $lang = '';
+        // is no language code given - use default
+        if( count($args) == 2) {
+                $lang =  pll_default_language();
+        }
+        // use the lang code given - test if the lang is installed
+        else {
+                $lang = $args[2];
+                if( !pll_is_language_installed($lang)) {
+                        WP_CLI::error("Language '$lang' is not installed!");
+                }
+        }
+
+        switch ($what = $args[0]) {
+            case 'post':
+            case 'term':
+                $method = 'pll_set_' . $what . '_language';
+                break;
+
+            default:
+                WP_CLI::error("Expected: wp polylang set <post or term> ..., not '$what'");
+        }
+
+        $id = $method($args[1], $lang);
+        WP_CLI::line($id);
+    }
+
+    /**
      * Adds, gets information about or removes a language
      *
      * ## OPTIONS
@@ -133,7 +181,6 @@ class Polylang_Command extends WP_CLI_Command {
      *   wp polylang language del vec
      *
      * @synopsis <operation> <language-code> [<order>]
-     * @alias lang
      */
     function language ($args, $assocArgs) {
         $language_code = $args[1];
