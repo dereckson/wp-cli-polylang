@@ -112,6 +112,47 @@ class Polylang_Command extends WP_CLI_Command {
     }
 
     /**
+     * Get the language of a post or a term as slug
+     *
+     * ## OPTIONS
+     *
+     * <data-type>
+     * : 'post' or 'term'
+     *
+     * <data-id>
+     * : the ID of the object to get the language for
+     *
+     * ## EXAMPLES
+     *
+     *   wp polylang getlang post 12
+     *   wp polylang getlang term 5
+     *
+     * @synopsis <data-type> <data-id>
+     */
+    function getlang($args, $assocArgs) {
+        switch ($what = $args[0]) {
+            case 'post':
+            case 'term':
+                $method = 'pll_get_' . $what . '_language';
+                break;
+
+            default:
+                WP_CLI::error("Expected: wp polylang getlang <post or term> ..., not '$what'");
+        }
+
+        // only available since 1.5.4 of polylang
+        if( !function_exists($method)) {
+            WP_CLI::error("function $method does not exist befor polylang 1.5.4!");
+        }
+
+        $lang = $method($args[1]);
+        if( !$lang) {
+            WP_CLI::error("'$what' $args[1] is not managed yet");
+        }
+        WP_CLI::line($lang);
+    }
+
+    /**
      * Sets a post or a term to the specified language
      *
      * ## OPTIONS
