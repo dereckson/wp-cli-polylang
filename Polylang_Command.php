@@ -258,7 +258,7 @@ class Polylang_Command extends WP_CLI_Command {
             if( array_key_exists( $lang, $arr)){
                 WP_CLI::error("$lang => $id as well as $lang => $arr[$lang] ar two $what with the same language!");
             }
-            $arr[ $lang] = $id;
+            $arr[ $lang] = intval($id);
         }
 
         // save the translation
