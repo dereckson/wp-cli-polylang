@@ -31,7 +31,6 @@ class Polylang_Command extends WP_CLI_Command {
      *     wp polylang languages
      *
      * @synopsis
-     * @alias langs
      */
     function languages ($args, $assocArgs) {
         $languages = pll_languages_list();
@@ -220,7 +219,7 @@ class Polylang_Command extends WP_CLI_Command {
      */
     function trans ($args, $assocArgs) {
         // comma sperated list as array
-        $data_ids = explode( ',', array_slice( $args[1], 1));
+        $data_ids = explode( ',', $args[1]);
 
         // two or more ids necessary
         if( count( $data_ids) < 2) {
