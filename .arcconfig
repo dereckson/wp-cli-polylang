@@ -1,0 +1,5 @@
+{
+  "phabricator.uri": "https://devcentral.nasqueron.org",
+  "repository.callsign": "WPCLIPOLY",
+  "unit.engine": "PhpunitTestEngine"
+}
