@@ -64,7 +64,7 @@ function pll_is_valid_language_code($language_code) {
  *
  * @param string $language_code ISO 639 or locale code
  * @param int $language_order language order [optional]
- * @param int &$error_code the error code, or 0 if the operation is succesful
+ * @param int &$error_code the error code, or 0 if the operation is successful
  * @return bool true if the language has been added; false if an error has occured
  */
 function pll_add_language($language_code, $language_order = 0, &$error_code = 0) {
