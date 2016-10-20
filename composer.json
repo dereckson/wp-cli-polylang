@@ -1,6 +1,6 @@
 {
     "name": "dereckson/wp-cli-polylang",
-    "type": "command",
+    "type": "wp-cli-package",
     "description": "Add a `wp polylang` command to support the Polylang plug-in",
     "keywords": [
         "wp-cli",
