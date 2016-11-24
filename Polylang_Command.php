@@ -31,12 +31,11 @@ class Polylang_Command extends WP_CLI_Command {
      *     wp polylang languages
      *
      * @synopsis
-     * @alias langs
      */
     function languages ($args, $assocArgs) {
-        $languages = pll_get_languages_list();
+        $languages = pll_languages_list();
         if (!count($languages)) {
-            WP_CLI::success("Less than two languages are currently configurated.");
+            WP_CLI::success("Less than two languages are currently configured.");
             return;
         }
 
@@ -112,6 +111,161 @@ class Polylang_Command extends WP_CLI_Command {
     }
 
     /**
+     * Get the language of a post or a term as slug
+     *
+     * ## OPTIONS
+     *
+     * <data-type>
+     * : 'post' or 'term'
+     *
+     * <data-id>
+     * : the ID of the object to get the language for
+     *
+     * ## EXAMPLES
+     *
+     *   wp polylang getlang post 12
+     *   wp polylang getlang term 5
+     *
+     * @synopsis <data-type> <data-id>
+     */
+    function getlang($args, $assocArgs) {
+        switch ($what = $args[0]) {
+            case 'post':
+            case 'term':
+                $method = 'pll_get_' . $what . '_language';
+                break;
+
+            default:
+                WP_CLI::error("Expected: wp polylang getlang <post or term> ..., not '$what'");
+        }
+
+        // only available since 1.5.4 of polylang
+        if( !function_exists($method)) {
+            WP_CLI::error("function $method does not exist befor polylang 1.5.4!");
+        }
+
+        $lang = $method($args[1]);
+        if( !$lang) {
+            WP_CLI::error("'$what' $args[1] is not managed yet");
+        }
+        WP_CLI::line($lang);
+    }
+
+    /**
+     * Sets a post or a term to the specified language
+     *
+     * ## OPTIONS
+     *
+     * <data-type>
+     * : 'post' or 'term'
+     *
+     * <data-id>
+     * : the ID of the object to set
+     *
+     * <language-code>
+     * : the language (if omitted, will be set to the default language)
+     *
+     * ## EXAMPLES
+     *
+     *   wp polylang set post 1 fr
+     *
+     * @synopsis <data-type> <data-id> [<language-code>]
+     */
+    function set($args, $assocArgs) {
+        $lang = '';
+        // is no language code given - use default
+        if( count($args) == 2) {
+                $lang =  pll_default_language();
+        }
+        // use the lang code given - test if the lang is installed
+        else {
+                $lang = $args[2];
+                if( !pll_is_language_installed($lang)) {
+                        WP_CLI::error("Language '$lang' is not installed!");
+                }
+        }
+
+        switch ($what = $args[0]) {
+            case 'post':
+            case 'term':
+                $method = 'pll_set_' . $what . '_language';
+                break;
+
+            default:
+                WP_CLI::error("Expected: wp polylang set <post or term> ..., not '$what'");
+        }
+
+        $method($args[1], $lang);
+        WP_CLI::success("language for $what $args[1] saved");
+    }
+
+    /**
+     * Associate terms or post as translations
+     *
+     * ## OPTIONS
+     *
+     * <data-type>
+     * : 'post' or 'term'
+     *
+     * <data-ids>
+     * : comma separated list of data IDs that are translations of each other
+     *
+     * ## EXAMPLES
+     *
+     *   wp polylang trans post 1,7,9
+     *   wp polylang trans term 27,32
+     *
+     * @synopsis <data-type> <data-ids>
+     */
+    function trans ($args, $assocArgs) {
+        // comma sperated list as array
+        $data_ids = explode( ',', $args[1]);
+
+        // two or more ids necessary
+        if( count( $data_ids) < 2) {
+                WP_CLI::error("need at least two ids for translation");
+        }
+
+        // term or post
+        switch ($what = $args[0]) {
+            case 'post':
+            case 'term':
+                $method = 'pll_save_' . $what . '_translations';
+                $get_lang_method = 'pll_get_' . $what . '_language';
+                break;
+
+            default:
+                WP_CLI::error("Expected: wp polylang trans <post or term> ..., not '$what'");
+        }
+
+        // only available since 1.5.4 of polylang
+        if( !function_exists($get_lang_method)) {
+            WP_CLI::error("function $get_lang_method does not exist befor polylang 1.5.4 and is necessary for this implementation!");
+        }
+
+        // get language of each term or post and build array for the pll_save api function
+        $arr = array();
+        foreach( $data_ids as $id) {
+            $lang = $get_lang_method( $id);
+
+            // is the post or term already managed
+            if( !$lang) {
+                WP_CLI::error("'$what' $id is not managed yet and cannot be translated");
+            }
+
+            // is there a post or term with the same language given?
+            if( array_key_exists( $lang, $arr)){
+                WP_CLI::error("$lang => $id as well as $lang => $arr[$lang] ar two $what with the same language!");
+            }
+            $arr[ $lang] = intval($id);
+        }
+
+        // save the translation
+        $method( $arr);
+        WP_CLI::success("translations saved");
+    }
+
+    /**
      * Adds, gets information about or removes a language
      *
      * ## OPTIONS
@@ -133,7 +287,6 @@ class Polylang_Command extends WP_CLI_Command {
      *   wp polylang language del vec
      *
      * @synopsis <operation> <language-code> [<order>]
-     * @alias lang
      */
     function language ($args, $assocArgs) {
         $language_code = $args[1];
@@ -174,7 +327,12 @@ class Polylang_Command extends WP_CLI_Command {
                     return;
                 }
 
-                WP_CLI::error("Not implemented: del language");
+                if (pll_del_language($language_code)) {
+                     WP_CLI::success("Language deleted.");
+                     return;
+                }
+
+                WP_CLI::error("Could not delete language");
                 break;
 
             default:

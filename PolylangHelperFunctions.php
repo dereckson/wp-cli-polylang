@@ -15,17 +15,6 @@
  * @filesource
  */
 
- /**
- * Gets an array with the cached infomrmation about installed languages.
- *
- * @return array the installed languages, each item a PLL_Language object
- */
-function pll_get_languages_list () {
-	global $polylang;
-
-	return $polylang->model->get_languages_list();
-}
-
 /**
  * Gets default language information
  *
@@ -86,15 +75,32 @@ function pll_add_language($language_code, $language_order = 0, &$error_code = 0)
 }
 
 /**
+ * Delete a language with the default locale.
+ *
+ * @param string $language_code ISO 639 or locale code
+ * @return bool true if the language has been deleted; false if an error has occured
+ */
+function pll_del_language($language_code) {
+        $languages = pll_languages_list();
+        foreach ($languages as $language) {
+                if ($language->slug == $language_code) {
+                    $adminModel = new PLL_Admin_Model($polylang->options);
+                    $adminModel->delete_language((int) $language->term_id);
+                    return true;
+                }
+        }
+
+        return false;
+}
+
+/**
  * Determines whether a language is currently installed.
  *
  * @param string $language_code The language slug
  * @return bool true if the language is installed; otherwise, false.
  */
 function pll_is_language_installed($language_code) {
-	global $polylang;
-
-	$languages = $polylang->model->get_languages_list();
+	$languages = pll_languages_list();
 	foreach ($languages as $language) {
 		if ($language->slug == $language_code) {
 			return true;
