@@ -8,7 +8,7 @@
         "i18n"
     ],
     "homepage": "https://github.com/dereckson/wp-cli-polylang",
-    "license": "GPLv2",
+    "license": "GPL-2.0",
     "authors": [
         {
             "name": "Sébastien Santoro aka Dereckson",
