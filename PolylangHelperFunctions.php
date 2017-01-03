@@ -34,7 +34,7 @@ function pll_get_languages_list () {
  */
 function pll_get_default_language_information($language_code) {
 	global $polylang;
-	require(PLL_ADMIN_INC.'/languages.php');
+	require(PLL_SETTINGS_INC.'/languages.php');
 	foreach ($languages as $language) {
 		if ($language[0] == $language_code || $language[1] == $language_code) {
 			$rtl = (count($language) > 3) && ($language[3] == 'rtl');
