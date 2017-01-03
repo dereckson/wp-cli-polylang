@@ -34,7 +34,7 @@ function pll_get_languages_list () {
  */
 function pll_get_default_language_information($language_code) {
 	global $polylang;
-	require(PLL_ADMIN_INC.'/languages.php');
+	require(PLL_SETTINGS_INC.'/languages.php');
 	foreach ($languages as $language) {
 		if ($language[0] == $language_code || $language[1] == $language_code) {
 			$rtl = (count($language) > 3) && ($language[3] == 'rtl');
@@ -75,11 +75,11 @@ function pll_add_language($language_code, $language_order = 0, &$error_code = 0)
 	$info = pll_get_default_language_information($language_code);
 
 	$args = array(
-		name => $info['name'],
-		slug => $info['code'],
-		locale => $info['locale'],
-		rtl => $info['rtl'] ? 1 : 0,
-		term_group => $language_order
+		'name' => $info['name'],
+		'slug' => $info['code'],
+		'locale' => $info['locale'],
+		'rtl' => $info['rtl'] ? 1 : 0,
+		'term_group' => $language_order
 	);
 	$error_code = $adminModel->add_language($args);
 	return $error_code !== 0;
