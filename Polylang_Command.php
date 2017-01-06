@@ -16,6 +16,9 @@ if (!defined('WP_CLI')) {
     return;
 }
 
+if(!defined('PLL_ADMIN'))
+	define('PLL_ADMIN', true);
+
 require_once 'PolylangHelperFunctions.php';
 
 /**
@@ -32,6 +35,8 @@ class Polylang_Command extends WP_CLI_Command {
      *
      * @synopsis
      * @alias langs
+     * 
+     * @when after_wp_load
      */
     function languages ($args, $assocArgs) {
         $languages = pll_get_languages_list();
@@ -66,6 +71,8 @@ class Polylang_Command extends WP_CLI_Command {
      *   wp polylang home fr
      *
      * @synopsis [<language-code>]
+     * 
+     * @when after_wp_load
      */
     function home ($args, $assocArgs) {
         $lang = (count($args) == 1) ?  $args[0] : '';
@@ -93,6 +100,8 @@ class Polylang_Command extends WP_CLI_Command {
      *   wp polylang get post 1 fr
      *
      * @synopsis <data-type> <data-id> [<language-code>]
+     * 
+     * @when after_wp_load
      */
     function get($args, $assocArgs) {
         $lang = (count($args) == 2) ?  '' : $args[2];
@@ -134,6 +143,8 @@ class Polylang_Command extends WP_CLI_Command {
      *
      * @synopsis <operation> <language-code> [<order>]
      * @alias lang
+     * 
+     * @when after_wp_load
      */
     function language ($args, $assocArgs) {
         $language_code = $args[1];
