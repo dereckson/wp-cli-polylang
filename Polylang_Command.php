@@ -30,7 +30,6 @@ class Polylang_Command extends WP_CLI_Command {
      *
      *     wp polylang languages
      *
-     * @synopsis
      * @alias langs
      */
     function languages ($args, $assocArgs) {
