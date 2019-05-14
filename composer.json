@@ -1,5 +1,5 @@
 {
-    "name": "dereckson/wp-cli-polylang",
+    "name": "superhuit-ch/wp-cli-polylang",
     "type": "wp-cli-package",
     "description": "Add a `wp polylang` command to support the Polylang plug-in",
     "keywords": [
