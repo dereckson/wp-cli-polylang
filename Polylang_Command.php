@@ -30,7 +30,6 @@ class Polylang_Command extends WP_CLI_Command {
      *
      *     wp polylang languages
      *
-     * @synopsis
      * @alias langs
      */
     function languages ($args, $assocArgs) {
@@ -150,7 +149,7 @@ class Polylang_Command extends WP_CLI_Command {
                 WP_CLI::line('Code:      ' . $language_info['code']);
                 WP_CLI::line('Locale     ' . $language_info['locale']);
                 WP_CLI::line('Name:      ' . $language_info['name']);
-                WP_CLI::line('RTL:       ' . ($language_info['rtl'] ? 'yes' : 'no'));
+                WP_CLI::line('Dir:       ' . $language_info['dir']);
                 WP_CLI::line('Installed: ' . ($language_installed ? 'yes' : 'no'));
                 break;
 

@@ -1,5 +1,5 @@
 {
-    "name": "dereckson/wp-cli-polylang",
+    "name": "superhuit-ch/wp-cli-polylang",
     "type": "wp-cli-package",
     "description": "Add a `wp polylang` command to support the Polylang plug-in",
     "keywords": [
@@ -9,12 +9,20 @@
     ],
     "homepage": "https://github.com/dereckson/wp-cli-polylang",
     "license": "GPLv2",
-    "authors": [{
+    "authors": [
+			{
         "name": "Sébastien Santoro aka Dereckson",
         "email": "dereckson@espace-win.org",
         "homepage": "http://www.dereckson.be",
         "role": "Developer"
-    }],
+			},
+			{
+        "name": "Superhuit",
+        "email": "tech@superhuit.ch",
+        "homepage": "https://superhuit.ch",
+        "role": "Developer"
+			}
+		],
     "require": {
         "php": ">=5.3.0"
     },
